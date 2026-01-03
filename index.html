@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AXON - Finance Control</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="bg-orbs" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">
+        <img
+          class="brand-logo"
+          src="axon_logo.jpg"
+          alt="AXON - Finance Control"
+          width="120"
+          height="36"
+        />
+        <div>
+          <p class="brand-title">AXON - Finance Control</p>
+          <p class="brand-subtitle">NextGen 2026</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-link active" data-view="dashboard">Dashboard</button>
+        <button class="nav-link" data-view="transactions">Transações</button>
+        <button class="nav-link" data-view="planning">Planejamento</button>
+        <button class="nav-link" data-view="reports">Relatórios</button>
+        <button class="nav-link" data-view="integrations">Integrações</button>
+        <button class="nav-link" data-view="onboarding">Onboarding</button>
+        <button class="nav-link" data-view="setup">Configurar</button>
+        <button class="nav-link" data-view="modules">Módulos</button>
+        <button class="nav-link" data-view="settings">Configurações</button>
+      </nav>
+      <div class="auth">
+        <span id="authStatus" class="muted">Desconectado</span>
+        <button class="ghost" id="loginBtn">Entrar</button>
+        <button class="ghost hidden" id="logoutBtn">Sair</button>
+      </div>
+    </header>
+
+    <main class="app">
+      <section class="profile-section">
+        <div id="user-profile-card" class="user-profile-card glass hidden">
+          <div class="profile-row">
+            <img
+              id="user-photo"
+              src=""
+              alt="Perfil do usuário"
+              width="48"
+              height="48"
+            />
+            <div>
+              <p class="profile-title">Perfil ativo</p>
+              <h3 id="user-name">Carregando...</h3>
+              <p id="user-status" class="profile-status">Perfil Moderado</p>
+            </div>
+          </div>
+          <p class="profile-note">
+            A IA usa este perfil para personalizar os conselhos financeiros.
+          </p>
+        </div>
+      </section>
+
+      <section class="screen active" id="dashboard" data-view="dashboard">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Visão geral</p>
+            <h1>Dashboard</h1>
+            <p class="muted">
+              Safe-to-spend, score financeiro e alertas em uma única visão.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Sincronizar Open Finance</button>
+            <button class="cta">Adicionar lançamento</button>
+          </div>
+        </div>
+
+        <div class="dashboard-top-grid">
+          <div class="kpi-metrics-grid">
+            <article class="glass kpi-card-compact">
+              <h3>Saldo consolidado</h3>
+              <div class="value">R$ 18.920</div>
+              <span class="status-badge positive">+8% este mês</span>
+            </article>
+            <article class="glass kpi-card-compact">
+              <h3>Despesas fixas</h3>
+              <div class="value">R$ 6.480</div>
+              <span class="status-badge negative">-3% vs. média</span>
+            </article>
+            <article class="glass kpi-card-compact">
+              <h3>Score de saúde</h3>
+              <div class="value">810</div>
+              <span class="status-badge neutral">Consciência alta</span>
+            </article>
+            <article class="glass kpi-card-compact goal-highlight">
+              <div class="kpi-header">
+                <span class="goal-label">
+                  <span class="goal-icon" aria-hidden="true"></span>
+                  <span id="widget-goal-name" class="goal-name">Reserva</span>
+                </span>
+                <span id="widget-percent" class="status-badge neutral">45%</span>
+              </div>
+              <div class="goal-mini-content">
+                <div class="kpi-value">
+                  <span id="widget-current">R$ 4.500</span>
+                  <span class="muted">/</span>
+                  <span id="widget-target" class="muted">R$ 10.000</span>
+                </div>
+                <div class="meter-micro">
+                  <span id="widget-bar" style="--value: 45%"></span>
+                </div>
+                <div id="widget-eta" class="goal-eta-mini">Faltam ~8 meses</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="hero-card glass safe-card">
+            <div class="card-header">
+              <h2>Safe-to-Spend</h2>
+              <span class="status green">Estimativa de hoje</span>
+            </div>
+            <div class="balance">
+              <p>Você pode gastar</p>
+              <h3 id="safeValue">R$ 4.320</h3>
+              <p class="muted">Saldo projetado em 30 dias</p>
+            </div>
+            <div class="sliders">
+              <label>
+                Receitas
+                <input type="range" min="5000" max="20000" value="12000" id="income" />
+                <span data-output="income">R$ 12.000</span>
+              </label>
+              <label>
+                Despesas fixas
+                <input type="range" min="1000" max="12000" value="4800" id="fixed" />
+                <span data-output="fixed">R$ 4.800</span>
+              </label>
+              <label>
+                Variáveis (média)
+                <input type="range" min="500" max="9000" value="2800" id="variable" />
+                <span data-output="variable">R$ 2.800</span>
+              </label>
+            </div>
+            <div class="forecast">
+              <div>
+                <p>Score financeiro</p>
+                <strong id="score">810</strong>
+              </div>
+              <div>
+                <p>Risco</p>
+                <strong class="warn">Baixo</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="glass">
+            <h3>Forecast de caixa</h3>
+            <p class="muted">Linha do tempo com previsão de saldo.</p>
+            <svg class="line-chart" viewBox="0 0 360 160" aria-hidden="true">
+              <polyline
+                points="10,120 60,90 120,110 180,70 240,60 300,45 350,30"
+                fill="none"
+                stroke="url(#lineGradient)"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <defs>
+                <linearGradient id="lineGradient" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stop-color="#4cc3ff" />
+                  <stop offset="100%" stop-color="#35e3a1" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="chart-meta">
+              <span>Hoje</span>
+              <span>+30 dias</span>
+            </div>
+          </article>
+          <article class="glass ai-card">
+            <div class="card-header">
+              <h3>Insight da IA</h3>
+              <span class="status">Em tempo real</span>
+            </div>
+            <p id="ai-advice-text" class="ai-advice">
+              Conecte uma conta para receber sugestões personalizadas.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen" id="setup" data-view="setup">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Configuração inicial</p>
+            <h1>Prepare seu perfil financeiro</h1>
+            <p class="muted">
+              Conecte contas, suba extratos e informe renda para liberar gráficos
+              personalizados.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost" id="skipSetupBtn">Fazer depois</button>
+          </div>
+        </div>
+
+        <div class="setup-grid">
+          <article class="glass setup-card">
+            <h3>Conectar banco</h3>
+            <p class="muted">
+              Use Open Finance para sincronizar automaticamente as transações.
+            </p>
+            <div class="setup-actions">
+              <button class="cta" id="connectBankBtn" type="button">
+                Conectar banco
+              </button>
+              <button class="ghost" id="viewConnectionsBtn" type="button">
+                Ver conexões
+              </button>
+            </div>
+            <div class="setup-upload">
+              <label class="field">
+                Importar extrato (CSV/OFX/PDF)
+                <input
+                  id="setupStatement"
+                  type="file"
+                  accept=".csv,.ofx,.pdf"
+                />
+              </label>
+              <p id="statementStatus" class="muted">Nenhum arquivo selecionado.</p>
+            </div>
+          </article>
+
+          <article class="glass setup-card">
+            <h3>Dados pessoais</h3>
+            <form id="setupForm" class="setup-form">
+              <label class="field">
+                Renda mensal (R$)
+                <input id="setupIncome" type="number" min="0" step="100" required />
+              </label>
+              <label class="field">
+                Outras rendas (R$)
+                <input id="setupExtraIncome" type="number" min="0" step="100" />
+              </label>
+              <label class="field">
+                Perfil financeiro
+                <select id="setupProfile" required>
+                  <option value="moderado">Moderado</option>
+                  <option value="arrojado">Arrojado</option>
+                </select>
+              </label>
+              <label class="field">
+                Início do acompanhamento
+                <input id="setupStartDate" type="date" />
+              </label>
+              <button class="cta" type="submit">Salvar configurações</button>
+              <p id="setupStatus" class="setup-status"></p>
+            </form>
+          </article>
+        </div>
+
+        <article class="glass setup-card setup-hint">
+          <h3>Checklist de ativação</h3>
+          <div class="checklist">
+            <div class="check-item">
+              <span class="check-dot"></span>
+              <div>
+                <strong>Conecte ou importe extratos</strong>
+                <p class="muted">Base para alertas e previsões.</p>
+              </div>
+            </div>
+            <div class="check-item">
+              <span class="check-dot"></span>
+              <div>
+                <strong>Informe renda mensal</strong>
+                <p class="muted">IA calcula metas e safe-to-spend.</p>
+              </div>
+            </div>
+            <div class="check-item">
+              <span class="check-dot"></span>
+              <div>
+                <strong>Revise categorias</strong>
+                <p class="muted">Ajuste o 50/30/20 com precisão.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen" id="transactions" data-view="transactions">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Fluxo de caixa</p>
+            <h1>Transações</h1>
+            <p class="muted">
+              Feed unificado com Open Finance + lançamentos manuais.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Importar extrato</button>
+            <button class="cta">Sync agora</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="glass">
+            <div class="toolbar">
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="Buscar por descrição, categoria ou conta"
+              />
+              <select id="typeFilter">
+                <option value="all">Todos os tipos</option>
+                <option value="entrada">Entradas</option>
+                <option value="saida">Saídas</option>
+              </select>
+              <input id="dateFrom" type="date" aria-label="Data inicial" />
+              <input id="dateTo" type="date" aria-label="Data final" />
+              <span id="sync-status" class="sync-status">Pronto</span>
+            </div>
+            <ul class="transaction-list" id="transactionList"></ul>
+          </article>
+
+          <form class="glass transaction-form" id="transactionForm">
+            <h3>Novo lançamento manual</h3>
+            <p class="muted">
+              Registre gastos em dinheiro ou ajustes rápidos.
+            </p>
+            <div class="form-grid">
+              <label class="field">
+                Descrição
+                <input id="txDescription" type="text" required />
+              </label>
+              <label class="field">
+                Valor (R$)
+                <input id="txAmount" type="number" min="0" step="10" required />
+              </label>
+              <label class="field">
+                Tipo
+                <select id="txType" required>
+                  <option value="entrada">Entrada</option>
+                  <option value="saida">Saída</option>
+                </select>
+              </label>
+              <label class="field">
+                Categoria
+                <select id="txCategory" required>
+                  <option value="Receita">Receita</option>
+                  <option value="Moradia">Moradia</option>
+                  <option value="Lazer">Lazer</option>
+                  <option value="Educação">Educação</option>
+                  <option value="Saúde">Saúde</option>
+                  <option value="Transporte">Transporte</option>
+                </select>
+              </label>
+              <label class="field">
+                Conta
+                <select id="txAccount" required>
+                  <option value="Conta principal">Conta principal</option>
+                  <option value="Cartão Black">Cartão Black</option>
+                  <option value="Conta PJ">Conta PJ</option>
+                </select>
+              </label>
+              <label class="field">
+                Data
+                <input id="txDate" type="date" required />
+              </label>
+            </div>
+            <button class="cta" type="submit">Adicionar transação</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="screen" id="planning" data-view="planning">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Metas & orçamento</p>
+            <h1>Planejamento</h1>
+            <p class="muted">
+              Metas gamificadas, barras de progresso e modo casal nativo.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Criar meta</button>
+            <button class="cta">Novo orçamento</button>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="glass goal-card">
+            <h3>Reserva de emergência</h3>
+            <p class="muted">R$ 9.800 / R$ 15.000</p>
+            <div class="progress"><span style="--value: 65%"></span></div>
+            <span class="kpi-tag">+R$ 450 esta semana</span>
+          </article>
+          <article class="glass goal-card">
+            <h3>Viagem 2026</h3>
+            <p class="muted">R$ 3.200 / R$ 8.000</p>
+            <div class="progress"><span style="--value: 40%"></span></div>
+            <span class="kpi-tag green">No ritmo ideal</span>
+          </article>
+          <article class="glass goal-card">
+            <h3>Quitar cartão</h3>
+            <p class="muted">R$ 1.900 / R$ 5.000</p>
+            <div class="progress"><span style="--value: 38%"></span></div>
+            <span class="kpi-tag coral">Atraso de 1 semana</span>
+          </article>
+        </div>
+
+        <article class="glass goals-panel">
+          <div class="card-header">
+            <h3>Suas Metas de Investimento</h3>
+            <button class="ghost btn-simulate" id="open-goal-modal">+ Nova Meta</button>
+          </div>
+          <div id="goals-container" class="goals-container"></div>
+        </article>
+
+        <div class="modal hidden" id="goalModal" role="dialog" aria-modal="true">
+          <div class="modal-card glass">
+            <div class="card-header">
+              <h3 id="goalModalTitle">Nova meta</h3>
+              <button class="ghost" id="closeGoalModal" type="button">Fechar</button>
+            </div>
+            <form id="goalForm" class="modal-body">
+              <label class="field">
+                Nome da meta
+                <input id="goalName" type="text" placeholder="Ex: Viagem 2026" required />
+              </label>
+              <label class="field">
+                Alvo (R$)
+                <input id="goalTarget" type="number" min="0" step="100" required />
+              </label>
+              <label class="field">
+                Valor atual (R$)
+                <input id="goalSaved" type="number" min="0" step="50" value="0" />
+              </label>
+              <div class="modal-actions">
+                <button class="ghost" id="cancelGoalModal" type="button">Cancelar</button>
+                <button class="cta" type="submit">Salvar meta</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <article class="glass simulator-card">
+          <div class="card-header">
+            <h3>Simulador de juros compostos</h3>
+            <span class="status">Projecao rapida</span>
+          </div>
+          <div class="form-grid">
+            <label class="field">
+              Aporte mensal (R$)
+              <input
+                id="compoundContribution"
+                type="number"
+                min="0"
+                step="50"
+                value="500"
+              />
+            </label>
+            <label class="field">
+              Meses
+              <input id="compoundMonths" type="number" min="1" step="1" value="12" />
+            </label>
+            <label class="field">
+              Taxa mensal (%)
+              <input
+                id="compoundRate"
+                type="number"
+                min="0"
+                step="0.1"
+                value="1"
+              />
+            </label>
+          </div>
+          <p id="compoundResult" class="simulator-result">
+            Resultado estimado: R$ 0
+          </p>
+        </article>
+
+        <div class="grid-2">
+          <article class="glass">
+            <h3>Orçamentos ativos</h3>
+            <div class="budget-row">
+              <span>Alimentação</span>
+              <div class="meter"><span style="--value: 72%"></span></div>
+              <strong>R$ 1.280</strong>
+            </div>
+            <div class="budget-row">
+              <span>Transporte</span>
+              <div class="meter"><span style="--value: 55%"></span></div>
+              <strong>R$ 620</strong>
+            </div>
+            <div class="budget-row">
+              <span>Lazer</span>
+              <div class="meter"><span style="--value: 84%"></span></div>
+              <strong class="warn">R$ 980</strong>
+            </div>
+          </article>
+          <article class="glass">
+            <div class="card-header">
+              <h3>Orçamento ideal 50/30/20</h3>
+              <span id="budgetStatus" class="status">Em análise</span>
+            </div>
+            <p class="muted">
+              Comparativo automático entre despesas reais e o ideal recomendado.
+            </p>
+            <div class="budget-ideal">
+              <div class="budget-line">
+                <div class="budget-label">
+                  <span>Necessidades</span>
+                  <small>Ideal 50%</small>
+                </div>
+                <div class="meter"><span id="needsBar"></span></div>
+                <strong id="needsValue">0%</strong>
+              </div>
+              <div class="budget-line">
+                <div class="budget-label">
+                  <span>Desejos</span>
+                  <small>Ideal 30%</small>
+                </div>
+                <div class="meter"><span id="wantsBar"></span></div>
+                <strong id="wantsValue">0%</strong>
+              </div>
+              <div class="budget-line">
+                <div class="budget-label">
+                  <span>Poupança</span>
+                  <small>Ideal 20%</small>
+                </div>
+                <div class="meter"><span id="savingsBar"></span></div>
+                <strong id="savingsValue">0%</strong>
+              </div>
+            </div>
+            <ul id="budgetAlerts" class="alert-list"></ul>
+          </article>
+          <article class="glass">
+            <h3>Modo casal</h3>
+            <p class="muted">
+              Contas compartilhadas, metas em conjunto e previsões combinadas.
+            </p>
+            <div class="couple-status">
+              <span class="muted">Espaco compartilhado</span>
+              <strong id="groupIdLabel">Nenhum</strong>
+            </div>
+            <div class="couple-actions">
+              <input
+                id="partnerEmail"
+                type="email"
+                placeholder="Email do parceiro(a)"
+                autocomplete="off"
+              />
+              <button class="ghost" id="invitePartnerBtn">Enviar convite</button>
+              <button class="ghost" id="createGroupBtn">Criar espaco</button>
+            </div>
+            <p id="groupStatus" class="group-status">
+              Crie um espaco para convidar e somar as transacoes do casal.
+            </p>
+            <div class="profile-pair">
+              <span class="avatar">JD</span>
+              <span class="avatar">LP</span>
+              <div>
+                <strong>Conta conjunta</strong>
+                <p class="muted">R$ 12.400 disponíveis</p>
+              </div>
+            </div>
+            <button class="ghost">Convidar parceiro(a)</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen" id="reports" data-view="reports">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Insights acionáveis</p>
+            <h1>Relatórios</h1>
+            <p class="muted">
+              Comparativos mensais, categorias críticas e evolução do saldo.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Exportar PDF</button>
+            <button class="cta">Comparar períodos</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="glass">
+            <h3>Comparativo mensal</h3>
+            <div class="bar-chart">
+              <div class="bar" style="--value: 65%"><span>Jan</span></div>
+              <div class="bar" style="--value: 72%"><span>Fev</span></div>
+              <div class="bar" style="--value: 58%"><span>Mar</span></div>
+              <div class="bar" style="--value: 80%"><span>Abr</span></div>
+              <div class="bar" style="--value: 90%"><span>Mai</span></div>
+              <div class="bar" style="--value: 76%"><span>Jun</span></div>
+            </div>
+            <p class="muted">Gastos totais vs. renda mensal.</p>
+          </article>
+          <article class="glass">
+            <h3>Distribuição por categoria</h3>
+            <div class="chart-wrapper">
+              <canvas
+                id="categoryChart"
+                width="320"
+                height="320"
+                aria-label="Gastos por categoria"
+                role="img"
+              ></canvas>
+            </div>
+            <p class="muted">Somente despesas do período filtrado.</p>
+          </article>
+        </div>
+
+        <article class="glass report-insights">
+          <h3>Insights do mês</h3>
+          <div class="insight-grid">
+            <div>
+              <strong>+R$ 420</strong>
+              <p class="muted">redução em assinaturas</p>
+            </div>
+            <div>
+              <strong>Risco moderado</strong>
+              <p class="muted">limite de cartão em 68%</p>
+            </div>
+            <div>
+              <strong>+12%</strong>
+              <p class="muted">economia com transporte</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen" id="integrations" data-view="integrations">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Conexões críticas</p>
+            <h1>Integrações</h1>
+            <p class="muted">
+              Open Finance, IA e serviços de segurança conectados ao núcleo.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Ver logs</button>
+            <button class="cta">Adicionar integração</button>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="glass integration-card">
+            <div class="card-top">
+              <h3>Open Finance</h3>
+              <span class="status green">Conectado</span>
+            </div>
+            <p class="muted">Pluggy/Belvo com sync automático diário.</p>
+          </article>
+          <article class="glass integration-card">
+            <div class="card-top">
+              <h3>IA Conversacional</h3>
+              <span class="status">Planejado</span>
+            </div>
+            <p class="muted">GPT-4o / Gemini Pro para insights.</p>
+          </article>
+          <article class="glass integration-card">
+            <div class="card-top">
+              <h3>Firebase Auth</h3>
+              <span class="status green">Ativo</span>
+            </div>
+            <p class="muted">Login social e analytics.</p>
+          </article>
+          <article class="glass integration-card">
+            <div class="card-top">
+              <h3>2FA</h3>
+              <span class="status">Aguardando</span>
+            </div>
+            <p class="muted">Camada extra de segurança.</p>
+          </article>
+          <article class="glass integration-card">
+            <div class="card-top">
+              <h3>Notificações</h3>
+              <span class="status green">Ativo</span>
+            </div>
+            <p class="muted">Alertas inteligentes em tempo real.</p>
+          </article>
+          <article class="glass integration-card">
+            <div class="card-top">
+              <h3>OCR de notas</h3>
+              <span class="status">Backlog</span>
+            </div>
+            <p class="muted">Leitura automática de recibos.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen" id="onboarding" data-view="onboarding">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Primeiro acesso</p>
+            <h1>Onboarding</h1>
+            <p class="muted">
+              Jornada guiada com prova de valor antes do usuário agir.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Editar fluxo</button>
+            <button class="cta">Simular onboarding</button>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item glass">
+            <h4>Splash: proposta em 3 telas</h4>
+            <p>“Menos planilhas, mais futuro.”</p>
+          </div>
+          <div class="timeline-item glass">
+            <h4>Login social + biometria</h4>
+            <p>Entrada segura em segundos.</p>
+          </div>
+          <div class="timeline-item glass">
+            <h4>Conexão Open Finance</h4>
+            <p>Sincronização histórica (30-90 dias).</p>
+          </div>
+          <div class="timeline-item glass">
+            <h4>Ajuste de categorias</h4>
+            <p>Validação assistida por IA.</p>
+          </div>
+          <div class="timeline-item glass">
+            <h4>Insight imediato</h4>
+            <p>Entrega do primeiro forecast antes do uso.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="modules" data-view="modules">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Mapa do produto</p>
+            <h1>Módulos do sistema</h1>
+            <p class="muted">
+              Componentes essenciais organizados por prioridade de entrega.
+            </p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Exportar roadmap</button>
+            <button class="cta">Atualizar prioridades</button>
+          </div>
+        </div>
+
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="P1">P1</button>
+          <button class="filter-btn" data-filter="P2">P2</button>
+          <button class="filter-btn" data-filter="P3">P3</button>
+          <button class="filter-btn" data-filter="P4">P4</button>
+        </div>
+        <div class="backlog">
+          <article class="glass backlog-item" data-priority="P1">
+            <h3>P1 • Autenticação + Biometria</h3>
+            <p>Google/Apple com segurança imediata.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P1">
+            <h3>P1 • Open Finance (extratos)</h3>
+            <p>Leitura automática de transações.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P1">
+            <h3>P1 • Dashboard consolidado</h3>
+            <p>Saldo + barra de orçamento.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P1">
+            <h3>P1 • Lançamento manual</h3>
+            <p>Registro para gastos em dinheiro.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P2">
+            <h3>P2 • IA de categorização</h3>
+            <p>Classificação automática de gastos.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P2">
+            <h3>P2 • Metas com progresso</h3>
+            <p>Gamificação com barras visuais.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P2">
+            <h3>P2 • Relatórios comparativos</h3>
+            <p>Visão mensal vs. histórico.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P3">
+            <h3>P3 • Chatbot financeiro</h3>
+            <p>Respostas rápidas sobre gastos.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P3">
+            <h3>P3 • Sistema de conquistas</h3>
+            <p>Níveis, badges e streaks.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P3">
+            <h3>P3 • Modo casal</h3>
+            <p>Contas compartilhadas.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P4">
+            <h3>P4 • OCR de notas fiscais</h3>
+            <p>Importação de gastos físicos.</p>
+          </article>
+          <article class="glass backlog-item" data-priority="P4">
+            <h3>P4 • Sugestão de investimentos</h3>
+            <p>Baseado em excedente de caixa.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen" id="settings" data-view="settings">
+        <div class="screen-header">
+          <div>
+            <p class="eyebrow">Preferências</p>
+            <h1>Configurações</h1>
+            <p class="muted">Segurança, privacidade e notificações.</p>
+          </div>
+          <div class="screen-actions">
+            <button class="ghost">Ver auditoria</button>
+            <button class="cta">Salvar alterações</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <article class="glass">
+            <h3>Segurança</h3>
+            <div class="toggle-row">
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span>Autenticação em dois fatores (2FA)</span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <label class="toggle">
+                <input type="checkbox" />
+                <span>Biometria no login</span>
+              </label>
+            </div>
+          </article>
+          <article class="glass">
+            <h3>Privacidade & alertas</h3>
+            <div class="toggle-row">
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span>Alertas de gasto atípico</span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span>Insights semanais por e-mail</span>
+              </label>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal hidden" id="authModal" role="dialog" aria-modal="true">
+      <div class="modal-card glass auth-card">
+        <div class="card-header">
+          <h3>Bem-vindo</h3>
+          <button class="ghost" id="closeAuthModal" type="button">Fechar</button>
+        </div>
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth-tab="login" type="button">
+            Entrar
+          </button>
+          <button class="auth-tab" data-auth-tab="signup" type="button">
+            Cadastre-se
+          </button>
+        </div>
+        <div class="auth-panel active" data-auth-panel="login">
+          <button class="cta auth-google-btn" id="googleLoginBtn" type="button">
+            Entrar com Google
+          </button>
+          <div class="auth-divider"><span>ou</span></div>
+          <form id="loginForm" class="auth-form">
+            <label class="field">
+              Email
+              <input id="loginEmail" type="email" required />
+            </label>
+            <label class="field">
+              Senha
+              <input id="loginPassword" type="password" required />
+            </label>
+            <button class="cta" type="submit">Entrar</button>
+            <p id="loginError" class="auth-error"></p>
+          </form>
+        </div>
+        <div class="auth-panel" data-auth-panel="signup">
+          <form id="signupForm" class="auth-form">
+            <label class="field">
+              Nome completo
+              <input id="signupName" type="text" required />
+            </label>
+            <label class="field">
+              Email
+              <input id="signupEmail" type="email" required />
+            </label>
+            <label class="field">
+              Senha
+              <input id="signupPassword" type="password" minlength="6" required />
+            </label>
+            <label class="field">
+              Renda mensal (R$)
+              <input id="signupIncome" type="number" min="0" step="100" required />
+            </label>
+            <label class="field">
+              Perfil financeiro
+              <select id="signupProfile" required>
+                <option value="moderado">Moderado</option>
+                <option value="arrojado">Arrojado</option>
+              </select>
+            </label>
+            <button class="cta" type="submit">Criar conta</button>
+            <p class="muted">
+              Enviaremos um email de confirmacao para liberar o acesso.
+            </p>
+            <p id="signupError" class="auth-error"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="verify-overlay hidden" id="verifyOverlay" role="status" aria-live="polite">
+      <div class="verify-card glass">
+        <h3>Confirme seu email</h3>
+        <p class="muted">
+          Enviamos um link de seguranca para o seu email. Confirme para acessar a
+          plataforma.
+        </p>
+        <div class="verify-actions">
+          <button class="ghost" id="resendVerificationBtn" type="button">
+            Reenviar email
+          </button>
+          <button class="cta" id="checkVerificationBtn" type="button">
+            Ja confirmei
+          </button>
+          <button class="ghost" id="logoutUnverifiedBtn" type="button">
+            Sair
+          </button>
+        </div>
+        <p id="verifyStatus" class="auth-error"></p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div>
+        <h3>AXON - Finance Control</h3>
+        <p>Roadmap 2026 • Privacy-first</p>
+      </div>
+      <div>
+        <p>Versão protótipo</p>
+        <p>contato@axon.finance</p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
